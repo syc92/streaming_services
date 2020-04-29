@@ -1,3 +1,5 @@
 final_cache_hbo.json
 final_cache_hulu.json
 final_cache_netflix.json
+final_cache_genre_country.json
+__pycache__

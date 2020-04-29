@@ -52,7 +52,6 @@ def get_item_data(soup_obj, item_url):
     release_year_obj = item_type_obj.findNext('td')
     imdb_obj = release_year_obj.findNext('td').findNext('td')
     rt_obj = imdb_obj.findNext('td')
-    on_obj = rt_obj.findNext('td')
     
     url = item_url
     title = title_obj.find('a').text
@@ -122,7 +121,7 @@ def update_data(dict_):
         VALUES (?, ?, ?, ?, ?, ?, ?)
     '''
     title_id_list = []
-    for k, v in dict_.items():
+    for v in dict_.values():
         item_url = v[0]
         title_id = title_to_id(item_url)
         while True:

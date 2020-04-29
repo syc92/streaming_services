@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Streaming Services Comparison</title>
+        <meta charset="UTF-8">
+        <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../static/style/main.css">
+    </head>
+    <body>
+        <h1><a href="/">Streaming Services Content Comparison</a></h1>
+        <div>
+            <a href="/templates/vt.html" class="tab" id="vt"> Video type</a>
+            <a href="/templates/myr.html" class="tab" id="myr"> Movie year</a>
+            <a href="/templates/gr.html" class="tab" id="gr"> Genere</a>
+            <a href="/templates/cty.html" class="tab" id="cty"> Country</a>
+        </div>
+
+        <button id="filter">Show menu</button>
+        <div id="menu" style="display: none;">
+            <form action="/gr_filter" method="POST">
+                <h3>Select services</h3>
+                <div id="select_button_s">Diselect all</div>
+                <div style="display: inline-block;">
+                    <div style="display: inline-block; width: 200px;"><input type="checkbox" name="hulu" checked class="service"><p style="display: inline-block">Hulu</p></div>
+                    <div style="display: inline-block; width: 200px;"><input type="checkbox" name="netflix" checked class="service"><p style="display: inline-block">Netflix</p></div>
+                    <div style="display: inline-block; width: 200px;"><input type="checkbox" name="hbo" checked class="service"><p style="display: inline-block">HBO</p></div>
+                </div>
+                <h3>Select genres</h3>
+                <div id="select_button_m">Diselect all</div>
+                <div style="display: inline-block;">{% include 'gr_menu.html' %}</div>
+                <input type="submit" value="Apply filter"/>
+            </form>
+        </div>
+
+        <div style="width: auto; height: auto;" id="graph">
+            
+        </div>
+
+        <script>
+            // select
+            var checked_s = true
+            var checked_m = true
+            
+            function selecting(checked, select, items) {
+                document.querySelector(select).addEventListener('click', function(){
+                    var results = document.querySelectorAll(items)
+                    if (checked) {
+                        for (i = 0; i < results.length; i ++) {
+                            results[i].checked = false
+                        }
+                        checked = false
+                        this.innerHTML = 'Select all'
+                    } else {
+                        for (i = 0; i < results.length; i ++) {
+                            results[i].checked = true
+                        }
+                        checked = true
+                        this.innerHTML = 'Diselect all'
+                    }
+                })
+            }
+            
+            selecting(checked_s, '#select_button_s', '.service')
+            selecting(checked_m, '#select_button_m', '.menu_inputs')
+            
+            // menu
+            var menu_shown = false
+            document.querySelector('#filter').addEventListener('click', function(){
+                if (!menu_shown){
+                    document.querySelector('#menu').setAttribute('style', 'display: block')
+                    menu_shown = true
+                } else {
+                    document.querySelector('#menu').setAttribute('style', 'display: none')
+                    menu_shown = false
+                }
+            })
+            
+            // select tab
+            var tab_type = 'gr';
+
+            var current_tab = '#' + tab_type;
+            document.querySelector(current_tab).setAttribute('style', 'background-color: #999')
+
+            const tabs = document.querySelectorAll('.tab')
+            for (const tab of tabs) {
+                tab.addEventListener("click", function(){
+                    for (const tab of tabs) {
+                        tab.setAttribute('style', 'background-color: white')
+                    }
+                    this.setAttribute('style', 'background-color: #999')
+                    tab_type = this.getAttribute('id')
+                    console.log(tab_type)
+                })
+            }
+        </script>
+        
+        <script>
+            var data = {{plot_data | safe}};
+            var layout = {title: 'Genre'};
+            Plotly.newPlot('graph', data, layout);
+        </script>     
+    </body>
+</html>

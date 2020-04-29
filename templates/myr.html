@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Streaming Services Comparison</title>
+        <meta charset="UTF-8">
+        <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../static/style/main.css">
+    </head>
+    <body>
+        <h1><a href="/">Streaming Services Content Comparison</a></h1>
+        <div>
+            <a href="/templates/vt.html" class="tab" id="vt"> Video type</a>
+            <a href="/templates/myr.html" class="tab" id="myr"> Movie year</a>
+            <a href="/templates/gr.html" class="tab" id="gr"> Genere</a>
+            <a href="/templates/cty.html" class="tab" id="cty"> Country</a>
+        </div>
+
+        <div style="width: auto; height: auto;" id="graph">
+            
+        </div>
+
+        <script>
+            // select tab
+            var tab_type = 'myr';
+
+            var current_tab = '#' + tab_type;
+            document.querySelector(current_tab).setAttribute('style', 'background-color: #999')
+
+            const tabs = document.querySelectorAll('.tab')
+            for (const tab of tabs) {
+                tab.addEventListener("click", function(){
+                    for (const tab of tabs) {
+                        tab.setAttribute('style', 'background-color: white')
+                    }
+                    this.setAttribute('style', 'background-color: #999')
+                    tab_type = this.getAttribute('id')
+                    console.log(tab_type)
+                })
+            }
+        </script>
+        
+        <script>
+            var data = {{plot_data | safe}};
+            var layout = {title: 'Release year'};
+            Plotly.newPlot('graph', data, layout);
+        </script>
+    </body>
+</html>

@@ -382,15 +382,3 @@ if __name__ == "__main__":
 
     print('starting Flask app', app.name)
     app.run(debug=True)
-    
-
-
-
-
-
-
-
-
-
-
-    # print(query_gr_cty('hbo', 'country'))
